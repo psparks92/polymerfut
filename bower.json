@@ -1,0 +1,20 @@
+{
+  "name": "PolymerFUT",
+  "homepage": "https://github.com/psparks92/polymerfut",
+  "authors": [
+    "psparks92 <psparks1992@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.4.0"
+  }
+}
