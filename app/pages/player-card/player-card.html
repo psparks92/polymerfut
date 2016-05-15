@@ -1,11 +1,11 @@
 <dom-module id="player-card">
     <link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html"/>
     <template>
-        <div>
-            <img src="../../images/{{player.color}}.png" style="position:relative; top:0px; right:0px;">
-            <img src="{{player.headshotImgUrl}}" style="position:relative; bottom:280px; left:85px; z-index:2">
-            <h5 class="md-title" style="position:relative; bottom:285px; left:5px;">{{player.lastName}}</h5>
-            <table style="border-spacing: 6px; border-collapse: separate; position:relative; bottom:300px; left:5px">
+        <div hidden$="{{hide}}">
+            <img src="images/card{{player.color}}.png" hidden?="{{!hasData}}" style="position:relative; top:0px; right:0px;">
+            <img src="{{player.headshotImgUrl}}" style="position:relative; bottom:158px; left:-120px; z-index:2">
+            <h3 class="md-title" style="position:relative; bottom:175px; left:5px;">{{player.lastName}}</h3>
+            <table style="border-spacing: 6px; border-collapse: separate; position:relative; bottom:200px; left:5px">
                 <tr>
                     <td>
                         Pace
@@ -50,8 +50,8 @@
                     </td>
                 </tr>
             </table>
-            <h3 class="md-display-1" style="position:relative; bottom:560px; left:40px;">{{player.rating}}</h3>
-            <h4 class="md-headline" style="position: relative; bottom:580px; left:40px;">
+            <h3 class="md-display-1" style="position:relative; bottom:420px; left:40px;">{{player.rating}}</h3>
+            <h4 class="md-headline" style="position: relative; bottom:420px; left:40px;">
                 {{player.position}}</h4>
         </div>
         <iron-ajax id="getPlayerRequest" method="GET" handle-as="json" on-response="populateCard"></iron-ajax>
@@ -63,9 +63,12 @@
         properties: {
             id: String,
             player: {
-                color: String,
+                color:{
+                    type:String,
+                    value:"blank"
+                },
                 id: Number,
-                headshotImgUrl: String,
+                headshotImgUrl:String,
                 position: String,
                 rating: Number,
                 pac: Number,
@@ -75,20 +78,26 @@
                 pas: Number,
                 def: Number,
                 notify:true
+            },
+            hide:{
+                type:Boolean,
+                value:true,
+                notify:true
             }
         },
         ready: function () {
             var self = this;
-            this.id = "9014";
+            //this.id = "9014";
             if (this.id != null) {
+                self.hide = false;
                 self.$.getPlayerRequest.url = "http://peterfutapi.azurewebsites.net/players/get/" + self.id;
                 self.$.getPlayerRequest.generateRequest();
 
             }
         },
        populateCard: function (response) {
-            var JSONplayer = JSON.parse(response.detail.response);
-            this.player = JSONplayer;
+
+            this.player = response.detail.response;
         }
     });
 </script>
