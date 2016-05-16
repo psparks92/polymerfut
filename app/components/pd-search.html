@@ -1,13 +1,22 @@
 <dom-module id="pd-search">
+    <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html"/>
+    <link rel="import" href="../../bower_components/iron-input/iron-input.html"/>
+    <link rel="import" href="../../bower_components/paper-radio-group/paper-radio-group.html"/>
+    <link rel="import" href="../../bower_components/paper-radio-button/paper-radio-button.html"/>
+    <link rel="import" href="../pages/player-card/player-card.html"/>
     <template>
-        <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html"/>
-        <link rel="import" href="../../bower_components/iron-input/iron-input.html"/>
-        <link rel="import" href="../pages/player-card/player-card.html"/>
-        <input type="text" on-input="fireSearchRequest" is="iron-input" bind-value="{{searchStr}}"/>
-        <template is="dom-repeat" items="{{players}}">
-            <span>{{item.firstName}},{{item.id}}</span>
-        <player-card id="9041"></player-card>
-        </template>
+        <style>
+            paper-radio-button {
+                display: inline-block;
+            }
+        </style>
+        <player-card id="{{selected}}"></player-card>
+        <input type="text"  is="iron-input" bind-value="{{searchStr}}"/>
+            <paper-radio-group selected="{{selected}}">
+                <template is="dom-repeat" items="{{players}}">
+                <paper-radio-button name="{{item.id}}">{{item.firstName}} {{item.lastName}} {{item.rating}} {{item.position}}</paper-radio-button>
+                </template>
+            </paper-radio-group>
         <iron-ajax id="searchPlayersRequest" method="GET" handle-as="json" on-response="populateList"></iron-ajax>
     </template>
 
@@ -16,14 +25,24 @@
     Polymer({
         is: "pd-search",
         properties: {
-            searchStr: String,
-            players: Array
+            searchStr:{
+                type:String,
+                observer:"_fireSearchRequest"
+            },
+            players: Array,
+            selected:{
+                type:String,
+                notify:true
+            }
         },
-        fireSearchRequest: function () {
+        _fireSearchRequest: function () {
             if (this.searchStr.length > 2) {
                 var self = this;
                 self.$.searchPlayersRequest.url = "http://peterfutapi.azurewebsites.net/players/search/" + self.searchStr;
                 self.$.searchPlayersRequest.generateRequest();
+            }
+            else {
+                this.players = [];
             }
         },
         populateList: function (response) {
