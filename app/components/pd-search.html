@@ -10,13 +10,13 @@
                 display: inline-block;
             }
         </style>
-        <player-card id="{{selected}}"></player-card>
         <input type="text"  is="iron-input" bind-value="{{searchStr}}"/>
             <paper-radio-group selected="{{selected}}">
                 <template is="dom-repeat" items="{{players}}">
                 <paper-radio-button name="{{item.id}}">{{item.firstName}} {{item.lastName}} {{item.rating}} {{item.position}}</paper-radio-button>
                 </template>
             </paper-radio-group>
+        <player-card id="{{selected}}"></player-card>
         <iron-ajax id="searchPlayersRequest" method="GET" handle-as="json" on-response="populateList"></iron-ajax>
     </template>
 
